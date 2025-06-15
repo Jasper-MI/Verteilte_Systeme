@@ -1,0 +1,136 @@
+services:
+  multicast-server-01:
+    image: amazoncorretto:24-alpine-jdk
+    #starts the server for the specified multicast group - last argument
+    command: ["java", 
+              "-cp", 
+              "/tmp/server-code/CServer/bin", 
+              "CServer",
+              "224.0.0.2"]
+    restart: none
+    stdin_open: true 
+    tty: true        
+    volumes:
+      - ./server-code:/tmp/server-code
+    networks:
+      networkMCast:
+       ipv4_address: 192.168.1.201
+
+  multicast-server-02:
+    image: amazoncorretto:24-alpine-jdk
+    #starts the server for the specified multicast group - last argument
+    command: ["java", 
+              "-cp", 
+              "/tmp/server-code/CServer/bin", 
+              "CServer",
+              "224.0.0.2"]
+    restart: none
+    stdin_open: true 
+    tty: true        
+    volumes:
+      - ./server-code:/tmp/server-code
+    networks:
+      networkMCast:
+       ipv4_address: 192.168.1.202
+
+  multicast-server-03:
+    image: amazoncorretto:24-alpine-jdk
+    #starts the server for the specified multicast group - last argument
+    command: ["java", 
+              "-cp", 
+              "/tmp/server-code/CServer/bin", 
+              "CServer",
+              "224.0.0.2"]
+    restart: none
+    stdin_open: true 
+    tty: true        
+    volumes:
+      - ./server-code:/tmp/server-code
+    networks:
+      networkMCast:
+       ipv4_address: 192.168.1.203
+
+  multicast-server-04:
+    image: amazoncorretto:24-alpine-jdk
+    #starts the server for the specified multicast group - last argument
+    command: ["java", 
+              "-cp", 
+              "/tmp/server-code/CServer/bin", 
+              "CServer",
+              "224.0.0.3"]
+    restart: none
+    stdin_open: true 
+    tty: true        
+    volumes:
+      - ./server-code:/tmp/server-code
+    networks:
+      networkMCast:
+       ipv4_address: 192.168.1.204
+
+  multicast-server-05:
+    image: amazoncorretto:24-alpine-jdk
+    #starts the server for the specified multicast group - last argument
+    command: ["java", 
+              "-cp", 
+              "/tmp/server-code/CServer/bin", 
+              "CServer",
+              "224.0.0.3"]
+    restart: none
+    stdin_open: true 
+    tty: true        
+    volumes:
+      - ./server-code:/tmp/server-code
+    networks:
+      networkMCast:
+       ipv4_address: 192.168.1.205
+
+  multicast-client-01: 
+    image: amazoncorretto:24-alpine-jdk
+    #starts the server for the specified multicast group - last argument
+    command: ["java", 
+              "-cp", 
+              "/tmp/client-code/CClient/bin", 
+              "CClient",
+              "224.0.0.2"]
+    depends_on: 
+      - multicast-server-01
+      - multicast-server-02
+      - multicast-server-03
+    restart: none 
+    stdin_open: true 
+    tty: true        
+    volumes:
+      - ./client-code:/tmp/client-code
+    networks:
+      networkMCast:
+       ipv4_address: 192.168.1.101
+
+  multicast-client-02: 
+    image: amazoncorretto:24-alpine-jdk
+    #starts the server for the specified multicast group - last argument
+    command: ["java", 
+              "-cp",
+              "/tmp/client-code/CClient/bin", 
+              "CClient",
+              "224.0.0.3"]
+    depends_on: 
+      - multicast-server-04
+      - multicast-server-05
+    restart: none 
+    stdin_open: true 
+    tty: true        
+    volumes:
+      - ./client-code:/tmp/client-code
+    networks:
+      networkMCast:
+        ipv4_address: 192.168.1.102
+
+
+networks:
+  networkMCast:
+    name: networkMCast
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.1.0/24
+
